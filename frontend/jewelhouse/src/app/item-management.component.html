@@ -1,0 +1,126 @@
+<section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="rounded-3xl border border-amber-300/70 bg-white/80 p-6 shadow-2xl shadow-amber-200/60 backdrop-blur-sm">
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-2xl font-semibold tracking-tight text-amber-950">Item Management</h2>
+      <button (click)="openCreateDialog()" class="rounded-xl bg-gradient-to-r from-amber-800 to-yellow-700 px-4 py-2 text-sm font-semibold text-white shadow hover:from-amber-900 hover:to-yellow-800">
+        + Create Item
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3 rounded-2xl border border-amber-200/60 bg-amber-50/70 p-4 md:grid-cols-2 xl:grid-cols-4">
+      <input
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+        class="rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm focus:border-yellow-600 focus:outline-none"
+        placeholder="Search By Name"
+      />
+
+      <div class="jh-select-wrap">
+        <select
+          [(ngModel)]="selectedMetalType"
+          (ngModelChange)="onFilterChange()"
+          class="jh-select w-full rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm text-stone-700 focus:border-yellow-600 focus:outline-none"
+        >
+          @for (opt of metalFilterOptions; track opt) {
+            <option [value]="opt">{{ opt }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="jh-select-wrap">
+        <select
+          [(ngModel)]="selectedAvailability"
+          (ngModelChange)="onFilterChange()"
+          class="jh-select w-full rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm text-stone-700 focus:border-yellow-600 focus:outline-none"
+        >
+          @for (availability of availabilities; track availability) {
+            <option [value]="availability">{{ availability }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="jh-select-wrap">
+        <select
+          [(ngModel)]="sortBy"
+          (ngModelChange)="onFilterChange()"
+          class="jh-select w-full rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm text-stone-700 focus:border-yellow-600 focus:outline-none"
+        >
+          <option value="name-asc">Sort: Name (A-Z)</option>
+          <option value="name-desc">Sort: Name (Z-A)</option>
+          <option value="charges-asc">Sort: Making Charges (Low-High)</option>
+          <option value="charges-desc">Sort: Making Charges (High-Low)</option>
+        </select>
+      </div>
+    </div>
+
+    @if (errorMessage) {
+      <p class="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{{ errorMessage }}</p>
+    }
+
+    <div class="mt-6 h-[520px] overflow-auto rounded-xl border border-amber-200/70">
+      <table class="min-w-full border-collapse">
+        <thead>
+          <tr class="bg-gradient-to-r from-amber-100 to-yellow-100 text-left text-xs uppercase tracking-wide text-amber-900">
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Metal Type</th>
+            <th class="px-4 py-3">Weight</th>
+            <th class="px-4 py-3">Making Charges</th>
+            <th class="px-4 py-3">Availability</th>
+            <th class="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of managedItems; track item.id) {
+            <tr class="border-b border-amber-100 text-sm text-stone-800 transition hover:bg-amber-50/70">
+              <td class="px-4 py-3 font-medium">{{ item.name }}</td>
+              <td class="px-4 py-3">{{ item.metalType }}</td>
+              <td class="px-4 py-3">{{ formatWeight(item.weight) }}</td>
+              <td class="px-4 py-3">{{ formatMakingCharges(item.makingCharges) }}</td>
+              <td class="px-4 py-3">{{ item.availability }}</td>
+              <td class="relative px-4 py-3 text-right">
+                <button (click)="toggleActions(item.id)" class="rounded-full p-2 hover:bg-amber-100/80" aria-label="Open row actions">
+                  <span class="text-lg leading-none text-amber-900">&#8942;</span>
+                </button>
+
+                @if (selectedActionRowId === item.id) {
+                  <div class="absolute right-4 top-12 z-10 w-32 rounded-xl border border-amber-200 bg-white py-2 text-left shadow-xl">
+                    <button (click)="openViewDialog(item)" class="block w-full px-3 py-2 text-sm hover:bg-amber-50">View</button>
+                    <button (click)="openUpdateDialog(item)" class="block w-full px-3 py-2 text-sm hover:bg-amber-50">Update</button>
+                    <button (click)="deleteItem(item.id)" class="block w-full px-3 py-2 text-sm text-red-700 hover:bg-red-50">Delete</button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+          @if (managedItems.length === 0) {
+            <tr>
+              <td colspan="6" class="px-4 py-6 text-center text-sm text-stone-500">
+                {{ isLoading ? 'Loading items...' : 'No items match the selected filters.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <p class="text-xs text-stone-600">Page {{ currentPage + 1 }} of {{ totalPages || 1 }} • {{ totalElements }} total items</p>
+      <div class="flex gap-2">
+        <button (click)="goToPreviousPage()" [disabled]="!canGoPrevious" class="rounded-lg border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-900 disabled:cursor-not-allowed disabled:opacity-50">Previous</button>
+        <button (click)="goToNextPage()" [disabled]="!canGoNext" class="rounded-lg border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-900 disabled:cursor-not-allowed disabled:opacity-50">Next</button>
+      </div>
+    </div>
+  </div>
+
+  @if (createDialogOpen) {
+    <app-create-item-dialog (close)="createDialogOpen = false" (save)="createItem($event)" />
+  }
+
+  @if (viewDialogItem) {
+    <app-view-item-dialog [item]="viewDialogItem" (close)="viewDialogItem = null" />
+  }
+
+  @if (updateDialogItem) {
+    <app-update-item-dialog [item]="updateDialogItem" (close)="updateDialogItem = null" (save)="updateItem($event)" />
+  }
+</section>

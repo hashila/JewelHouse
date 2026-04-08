@@ -1,0 +1,41 @@
+<div class="jh-dialog-backdrop" (click)="close.emit()">
+  <div class="jh-dialog-panel" (click)="$event.stopPropagation()">
+    <h3 class="text-xl font-semibold text-amber-950">View Item</h3>
+    <p class="mt-1 text-sm text-stone-600">{{ item.name }}</p>
+
+    @if (imageDataUrl) {
+      <div class="mt-4 overflow-hidden rounded-xl border border-amber-200 bg-amber-50 p-2">
+        <img [src]="imageDataUrl" [alt]="item.name" class="h-52 w-full rounded-lg object-cover" />
+      </div>
+    }
+
+    <div class="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+      <div class="jh-view-row"><span>Metal Type</span><strong>{{ item.metalType }}</strong></div>
+      <div class="jh-view-row"><span>Weight</span><strong>{{ item.weight }}</strong></div>
+      <div class="jh-view-row"><span>Making Charges</span><strong>{{ item.makingCharges }}</strong></div>
+      <div class="jh-view-row sm:col-span-2 items-start gap-4">
+        <span class="shrink-0 pt-0.5">Taxes</span>
+        <div class="min-w-0 flex-1">
+          @if (item.taxes.length) {
+            <ul class="m-0 list-none space-y-2 p-0">
+              @for (t of item.taxes; track $index) {
+                <li class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-stone-800">
+                  <strong class="text-amber-950">{{ t.taxName }}</strong>
+                  <span class="text-stone-400">·</span>
+                  <span class="tabular-nums font-semibold text-amber-900/90">{{ t.taxPercentage }}%</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <strong class="text-stone-800">—</strong>
+          }
+        </div>
+      </div>
+      <div class="jh-view-row sm:col-span-2"><span>Availability</span><strong>{{ item.availability }}</strong></div>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+      <button (click)="close.emit()" class="rounded-lg bg-gradient-to-r from-amber-800 to-yellow-700 px-4 py-2 text-sm font-semibold text-white">Close</button>
+    </div>
+  </div>
+</div>

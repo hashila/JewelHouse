@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fffbeb;
+  color: #1c1917;
+}
+
+.jh-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.jh-select-wrap {
+  position: relative;
+}
+
+.jh-select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 0.95rem;
+  top: 50%;
+  width: 0.58rem;
+  height: 0.58rem;
+  border-right: 2px solid #78350f;
+  border-bottom: 2px solid #78350f;
+  transform: translateY(-62%) rotate(45deg);
+  pointer-events: none;
+}
+
+input::placeholder {
+  color: #a8a29e;
+}
+
+.jh-header-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0.9rem;
+  z-index: 50;
+  width: calc(100% - 1.5rem);
+  margin: 0 0.75rem;
+  transform: translateY(0) scale(1);
+  transition: transform 260ms ease, top 260ms ease;
+}
+
+.jh-header-wrap--scrolled {
+  top: 0.35rem;
+  transform: translateY(-3px) scale(0.995);
+}
+
+.jh-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: linear-gradient(105deg, rgba(28, 18, 5, 0.95), rgba(120, 70, 4, 0.94), rgba(180, 83, 9, 0.93));
+  box-shadow: 0 16px 30px rgba(120, 53, 15, 0.22);
+  padding: 0.9rem 1rem;
+  backdrop-filter: blur(8px);
+  transition: padding 260ms ease;
+}
+
+.jh-header-wrap--scrolled .jh-header-inner {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+}
+
+.jh-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(28, 25, 23, 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.jh-dialog-panel {
+  width: min(720px, 100%);
+  border-radius: 1rem;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: #fffdf7;
+  padding: 1.25rem;
+  box-shadow: 0 20px 40px rgba(120, 53, 15, 0.25);
+}
+
+.jh-dialog-input {
+  border: 1px solid #fcd34d;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.jh-dialog-input:focus {
+  outline: none;
+  border-color: #d97706;
+}
+
+.jh-view-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid #fef3c7;
+  background: #fffbeb;
+  border-radius: 0.75rem;
+  padding: 0.625rem 0.75rem;
+}
+
+.jh-view-row span {
+  color: #78716c;
+}

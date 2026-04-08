@@ -1,0 +1,144 @@
+<section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <h2 class="text-2xl font-semibold tracking-tight text-amber-950">Item List</h2>
+    <div class="flex gap-2 rounded-2xl border border-amber-300/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm">
+      <button
+        (click)="viewMode = 'grid'"
+        [class]="viewMode === 'grid' ? 'rounded-xl bg-gradient-to-r from-amber-700 to-yellow-600 px-4 py-1.5 text-sm font-semibold text-white shadow' : 'rounded-xl px-4 py-1.5 text-sm font-semibold text-amber-900'"
+      >
+        Grid
+      </button>
+      <button
+        (click)="viewMode = 'list'"
+        [class]="viewMode === 'list' ? 'rounded-xl bg-gradient-to-r from-amber-700 to-yellow-600 px-4 py-1.5 text-sm font-semibold text-white shadow' : 'rounded-xl px-4 py-1.5 text-sm font-semibold text-amber-900'"
+      >
+        List
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-7 grid grid-cols-1 gap-3 rounded-2xl border border-amber-300/60 bg-white/70 p-4 shadow-lg shadow-amber-100/80 backdrop-blur-sm md:grid-cols-2 xl:grid-cols-4">
+    <input
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+      class="rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm focus:border-yellow-600 focus:outline-none"
+      placeholder="Search by name"
+    />
+
+    <div class="jh-select-wrap">
+      <select
+        [(ngModel)]="selectedMetalType"
+        (ngModelChange)="onFilterChange()"
+        class="jh-select w-full rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm text-stone-700 focus:border-yellow-600 focus:outline-none"
+      >
+        @for (opt of metalFilterOptions; track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="jh-select-wrap">
+      <select
+        [(ngModel)]="selectedAvailability"
+        (ngModelChange)="onFilterChange()"
+        class="jh-select w-full rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm text-stone-700 focus:border-yellow-600 focus:outline-none"
+      >
+        @for (opt of availabilityFilterOptions; track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="jh-select-wrap">
+      <select
+        [(ngModel)]="sortBy"
+        (ngModelChange)="onFilterChange()"
+        class="jh-select w-full rounded-xl border border-amber-300 bg-white px-3 py-2.5 text-sm text-stone-700 focus:border-yellow-600 focus:outline-none"
+      >
+        <option value="name-asc">Sort: Name (A-Z)</option>
+        <option value="name-desc">Sort: Name (Z-A)</option>
+        <option value="charges-asc">Sort: Making charges (Low-High)</option>
+        <option value="charges-desc">Sort: Making charges (High-Low)</option>
+      </select>
+    </div>
+  </div>
+
+  @if (viewMode === 'grid') {
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      @for (item of jewelleryItems; track item.id) {
+        <article class="group overflow-hidden rounded-3xl border border-amber-200/70 bg-white/85 shadow-lg shadow-amber-200/60 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-amber-300/60">
+          <img [src]="item.image" [alt]="item.name" class="h-52 w-full object-cover" />
+          <div class="space-y-2 p-4">
+            <h3 class="text-lg font-semibold text-amber-950 transition group-hover:text-amber-700">{{ item.name }}</h3>
+            <p class="text-sm text-stone-600">{{ item.metalType }} • {{ item.weight }} • {{ item.category }}</p>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-xl font-bold text-amber-800">{{ formatPrice(item.price) }}</span>
+              <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">{{ item.availability }}</span>
+            </div>
+          </div>
+        </article>
+      }
+      @if (!isLoading && jewelleryItems.length === 0) {
+        <p class="col-span-full rounded-xl border border-amber-200 bg-white/80 px-4 py-8 text-center text-sm text-stone-600">
+          No active items match your filters.
+        </p>
+      }
+    </div>
+  } @else {
+    <div class="overflow-x-auto rounded-2xl border border-amber-200/80 bg-white/85 shadow-lg shadow-amber-200/70 backdrop-blur-sm">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gradient-to-r from-amber-100 to-yellow-100 text-left text-xs uppercase tracking-wide text-amber-900">
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Category</th>
+            <th class="px-4 py-3">Metal Type</th>
+            <th class="px-4 py-3">Weight</th>
+            <th class="px-4 py-3">Making charges</th>
+            <th class="px-4 py-3">Availability</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of jewelleryItems; track item.id) {
+            <tr class="border-t border-amber-100 text-sm text-stone-800 transition hover:bg-amber-50/70">
+              <td class="px-4 py-3 font-medium">{{ item.name }}</td>
+              <td class="px-4 py-3">{{ item.category }}</td>
+              <td class="px-4 py-3">{{ item.metalType }}</td>
+              <td class="px-4 py-3">{{ item.weight }}</td>
+              <td class="px-4 py-3 font-semibold text-amber-700">{{ formatPrice(item.price) }}</td>
+              <td class="px-4 py-3">{{ item.availability }}</td>
+            </tr>
+          }
+          @if (!isLoading && jewelleryItems.length === 0) {
+            <tr>
+              <td colspan="6" class="px-4 py-6 text-center text-sm text-stone-500">No active items match your filters.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+    <p class="text-xs text-stone-600">
+      Page {{ currentPage + 1 }} of {{ totalPages || 1 }} • {{ totalElements }} items
+    </p>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        (click)="goToPreviousPage()"
+        [disabled]="!canGoPrevious"
+        class="rounded-lg border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-900 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <button
+        type="button"
+        (click)="goToNextPage()"
+        [disabled]="!canGoNext"
+        class="rounded-lg border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-900 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</section>
