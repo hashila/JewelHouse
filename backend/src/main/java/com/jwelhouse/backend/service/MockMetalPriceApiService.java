@@ -30,17 +30,36 @@ public class MockMetalPriceApiService {
 	private volatile Map<String, BigDecimal> cachedPricesByCode;
 	private volatile PriceUnit priceUnit;
 
+	/**
+	 * Initializes the file-backed mock price API service and empty in-memory cache.
+	 *
+	 * @param metalPriceResource classpath resource that contains mock metal prices JSON
+	 */
 	public MockMetalPriceApiService(@Value("classpath:mock/metal-prices.json") Resource metalPriceResource) {
 		this.metalPriceResource = metalPriceResource;
 		this.cachedPricesByCode = Collections.emptyMap();
 		this.priceUnit = PriceUnit.G;
 	}
 
+	/**
+	 * Returns the current metal prices map keyed by metal code.
+	 * Data is loaded lazily once from the mock JSON file and then cached.
+	 *
+	 * @return immutable map of metal code to configured unit price
+	 */
 	public Map<String, BigDecimal> getCurrentPricesByCode() {
 		ensureCacheLoaded();
 		return cachedPricesByCode;
 	}
 
+	/**
+	 * Calculates metal cost for a given weight using the configured unit in the
+	 * mock price file (`KG` or `G`) and the metal's unit price.
+	 *
+	 * @param metalCode metal code used for price lookup (for example XAU)
+	 * @param weightInGrams item weight in grams
+	 * @return computed metal cost rounded to 2 decimals
+	 */
 	public BigDecimal calculateMetalCostForWeight(String metalCode, BigDecimal weightInGrams) {
 		if (metalCode == null || metalCode.isBlank() || weightInGrams == null || weightInGrams.signum() <= 0) {
 			return BigDecimal.ZERO;
@@ -60,6 +79,11 @@ public class MockMetalPriceApiService {
 		return unitPrice.multiply(normalizedWeight).setScale(2, RoundingMode.HALF_UP);
 	}
 
+	/**
+	 * Loads and caches mock pricing data once in a thread-safe manner.
+	 *
+	 * @implNote uses double-checked locking on an immutable cache map.
+	 */
 	private void ensureCacheLoaded() {
 		if (!cachedPricesByCode.isEmpty()) {
 			return;
@@ -75,6 +99,12 @@ public class MockMetalPriceApiService {
 		}
 	}
 
+	/**
+	 * Reads the mock JSON file, extracts per-code prices, resolves the unit,
+	 * and returns immutable data for cache assignment.
+	 *
+	 * @return parsed and immutable price data with unit metadata
+	 */
 	private PriceData loadFromMockApiFile() {
 		try (InputStream inputStream = metalPriceResource.getInputStream()) {
 			String jsonContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
@@ -96,6 +126,12 @@ public class MockMetalPriceApiService {
 		}
 	}
 
+	/**
+	 * Resolves the configured price unit from JSON; defaults to grams when absent.
+	 *
+	 * @param jsonContent full JSON string content
+	 * @return resolved {@link PriceUnit}
+	 */
 	private PriceUnit resolvePriceUnit(String jsonContent) {
 		Matcher unitMatcher = UNIT_PATTERN.matcher(jsonContent);
 		if (unitMatcher.find()) {

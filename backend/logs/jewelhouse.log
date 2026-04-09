@@ -2770,3 +2770,283 @@ Consider defining a bean of type 'com.jwelhouse.backend.service.ItemService' in 
 2026-04-09 15:44:05 [http-nio-8080-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:CHAR) <- [A]
 2026-04-09 15:44:05 [http-nio-8080-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [0]
 2026-04-09 15:44:05 [http-nio-8080-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:INTEGER) <- [10]
+2026-04-09 15:52:25 [http-nio-8080-exec-9] INFO  c.j.b.controller.MetalController - GET /api/metals/getList
+2026-04-09 15:52:25 [http-nio-8080-exec-7] INFO  c.j.b.controller.ItemController - GET /api/items/getActiveList - page: 0, pageSize: 10, name: null, metalType: null, availability: null, sortBy: name, sortDir: asc
+2026-04-09 15:52:25 [http-nio-8080-exec-9] INFO  c.j.backend.service.MetalService - Fetching metal list
+2026-04-09 15:52:25 [http-nio-8080-exec-7] INFO  c.j.backend.service.ItemService - Fetching active items - page: 0, pageSize: 10, name: null, metalType: null, availability: null, sortBy: name, sortDir: asc
+2026-04-09 15:52:25 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - select m1_0.id,m1_0.code,m1_0.name from metal m1_0 order by m1_0.name
+2026-04-09 15:52:25 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - select i1_0.id,i1_0.availability,i1_0.created_at,i1_0.image,i1_0.making_charges,i1_0.metal_type,i1_0.name,i1_0.shipping_charges,i1_0.status,i1_0.updated_at,i1_0.weight from item i1_0 where i1_0.status=? order by i1_0.name limit ?,?
+2026-04-09 15:52:25 [http-nio-8080-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:CHAR) <- [A]
+2026-04-09 15:52:25 [http-nio-8080-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [0]
+2026-04-09 15:52:25 [http-nio-8080-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:INTEGER) <- [10]
+2026-04-09 15:52:25 [http-nio-8080-exec-7] DEBUG c.j.backend.service.ItemService - Found 0 active items
+2026-04-09 15:52:29 [http-nio-8080-exec-2] INFO  c.j.b.controller.MetalController - GET /api/metals/getList
+2026-04-09 15:52:29 [http-nio-8080-exec-2] INFO  c.j.backend.service.MetalService - Fetching metal list
+2026-04-09 15:52:29 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - select m1_0.id,m1_0.code,m1_0.name from metal m1_0 order by m1_0.name
+2026-04-09 15:54:11 [http-nio-8080-exec-8] INFO  c.j.b.controller.MetalController - GET /api/metals/getList
+2026-04-09 15:54:11 [http-nio-8080-exec-8] INFO  c.j.backend.service.MetalService - Fetching metal list
+2026-04-09 15:54:11 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select m1_0.id,m1_0.code,m1_0.name from metal m1_0 order by m1_0.name
+2026-04-09 15:58:21 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 26 class path changes (0 additions, 26 deletions, 0 modifications)
+2026-04-09 15:58:21 [Thread-1] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-09 15:58:21 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-09 15:58:21 [Thread-1] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:21 [Thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-09 15:58:21 [Thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-09 15:58:21 [restartedMain] INFO  c.j.backend.BackendApplication - Starting BackendApplication using Java 23.0.1 with PID 40112 (H:\Projects\1rstWap-Assignment\JewelHouse\backend\target\classes started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 15:58:21 [restartedMain] DEBUG c.j.backend.BackendApplication - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 15:58:21 [restartedMain] INFO  c.j.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 15:58:22 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 15:58:22 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 JPA repository interfaces.
+2026-04-09 15:58:22 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-09 15:58:22 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-09 15:58:22 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-09 15:58:22 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 767 ms
+2026-04-09 15:58:22 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-04-09 15:58:22 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6ba104d6
+2026-04-09 15:58:22 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-04-09 15:58:22 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 15:58:22 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 15:58:22 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 15:58:22 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 15:58:22 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 15:58:22 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:23 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-09 15:58:23 [restartedMain] INFO  c.j.backend.BackendApplication - Started BackendApplication in 1.457 seconds (process running for 914.476)
+2026-04-09 15:58:23 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-04-09 15:58:24 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 4 class path changes (4 additions, 0 deletions, 0 modifications)
+2026-04-09 15:58:24 [Thread-5] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-09 15:58:24 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-09 15:58:24 [Thread-5] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:24 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2026-04-09 15:58:24 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2026-04-09 15:58:24 [restartedMain] INFO  c.j.backend.BackendApplication - Starting BackendApplication using Java 23.0.1 with PID 40112 (H:\Projects\1rstWap-Assignment\JewelHouse\backend\target\classes started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 15:58:24 [restartedMain] DEBUG c.j.backend.BackendApplication - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 15:58:24 [restartedMain] INFO  c.j.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 15:58:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 15:58:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 131 ms. Found 3 JPA repository interfaces.
+2026-04-09 15:58:27 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-09 15:58:27 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-09 15:58:27 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-09 15:58:27 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2912 ms
+2026-04-09 15:58:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2026-04-09 15:58:27 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@545e0347
+2026-04-09 15:58:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2026-04-09 15:58:27 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 15:58:27 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 15:58:27 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 15:58:27 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 15:58:28 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 15:58:28 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:28 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-09 15:58:28 [restartedMain] INFO  c.j.backend.BackendApplication - Started BackendApplication in 3.81 seconds (process running for 919.776)
+2026-04-09 15:58:28 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-04-09 15:58:29 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 22 class path changes (22 additions, 0 deletions, 0 modifications)
+2026-04-09 15:58:29 [Thread-9] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-09 15:58:30 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-09 15:58:30 [Thread-9] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:30 [Thread-9] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2026-04-09 15:58:30 [Thread-9] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2026-04-09 15:58:30 [restartedMain] INFO  c.j.backend.BackendApplication - Starting BackendApplication using Java 23.0.1 with PID 40112 (H:\Projects\1rstWap-Assignment\JewelHouse\backend\target\classes started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 15:58:30 [restartedMain] DEBUG c.j.backend.BackendApplication - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 15:58:30 [restartedMain] INFO  c.j.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 19 ms. Found 3 JPA repository interfaces.
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-09 15:58:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-09 15:58:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 357 ms
+2026-04-09 15:58:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2026-04-09 15:58:30 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ba2246d
+2026-04-09 15:58:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2026-04-09 15:58:30 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 15:58:30 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 15:58:30 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 15:58:30 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-09 15:58:30 [restartedMain] INFO  c.j.backend.BackendApplication - Started BackendApplication in 0.85 seconds (process running for 922.111)
+2026-04-09 15:58:30 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-04-09 15:58:33 [main] INFO  c.j.backend.BackendApplicationTests - Starting BackendApplicationTests using Java 23.0.1 with PID 32760 (started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 15:58:33 [main] DEBUG c.j.backend.BackendApplicationTests - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 15:58:33 [main] INFO  c.j.backend.BackendApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 15:58:34 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 15:58:35 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 100 ms. Found 3 JPA repository interfaces.
+2026-04-09 15:58:35 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-09 15:58:36 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@20a1b3ae
+2026-04-09 15:58:36 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-09 15:58:36 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 15:58:36 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-09 15:58:37 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 15:58:38 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 15:58:38 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 15:58:39 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 15:58:39 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:39 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-09 15:58:41 [main] INFO  c.j.backend.BackendApplicationTests - Started BackendApplicationTests in 8.869 seconds (process running for 11.139)
+2026-04-09 15:58:43 [main] INFO  c.j.backend.service.ItemService - Fetching active items with price - page: 0, pageSize: 10, name: null, metalType: null, availability: null, sortBy: name, sortDir: asc
+2026-04-09 15:58:43 [main] INFO  c.j.backend.service.ItemService - Fetching item with id: 10
+2026-04-09 15:58:43 [main] INFO  c.j.backend.service.ItemService - Creating new item with name: Ring
+2026-04-09 15:58:43 [main] INFO  c.j.backend.service.ItemService - Item created successfully with id: 1
+2026-04-09 15:58:43 [main] INFO  c.j.backend.service.ItemService - Updating item with id: 5
+2026-04-09 15:58:43 [main] INFO  c.j.backend.service.ItemService - Item updated successfully with id: 5
+2026-04-09 15:58:43 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 15:58:43 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-09 15:58:43 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-09 16:02:30 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 26 class path changes (0 additions, 26 deletions, 0 modifications)
+2026-04-09 16:02:30 [Thread-13] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-09 16:02:30 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-09 16:02:30 [Thread-13] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 16:02:30 [Thread-13] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2026-04-09 16:02:30 [Thread-13] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2026-04-09 16:02:30 [restartedMain] INFO  c.j.backend.BackendApplication - Starting BackendApplication using Java 23.0.1 with PID 40112 (H:\Projects\1rstWap-Assignment\JewelHouse\backend\target\classes started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 16:02:30 [restartedMain] DEBUG c.j.backend.BackendApplication - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 16:02:30 [restartedMain] INFO  c.j.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 3 JPA repository interfaces.
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-09 16:02:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-09 16:02:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 254 ms
+2026-04-09 16:02:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2026-04-09 16:02:30 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7e4fde16
+2026-04-09 16:02:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2026-04-09 16:02:30 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 16:02:30 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 16:02:30 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 16:02:30 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-09 16:02:30 [restartedMain] INFO  c.j.backend.BackendApplication - Started BackendApplication in 0.484 seconds (process running for 1162.087)
+2026-04-09 16:02:30 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-04-09 16:02:32 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 26 class path changes (26 additions, 0 deletions, 0 modifications)
+2026-04-09 16:02:32 [Thread-17] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-09 16:02:32 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-09 16:02:32 [Thread-17] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 16:02:32 [Thread-17] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2026-04-09 16:02:32 [Thread-17] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2026-04-09 16:02:32 [restartedMain] INFO  c.j.backend.BackendApplication - Starting BackendApplication using Java 23.0.1 with PID 40112 (H:\Projects\1rstWap-Assignment\JewelHouse\backend\target\classes started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 16:02:32 [restartedMain] DEBUG c.j.backend.BackendApplication - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 16:02:32 [restartedMain] INFO  c.j.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 3 JPA repository interfaces.
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-09 16:02:32 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-09 16:02:32 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 136 ms
+2026-04-09 16:02:32 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Starting...
+2026-04-09 16:02:32 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@ddc27da
+2026-04-09 16:02:32 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Start completed.
+2026-04-09 16:02:32 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 16:02:32 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 16:02:32 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 16:02:32 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-09 16:02:32 [restartedMain] INFO  c.j.backend.BackendApplication - Started BackendApplication in 0.338 seconds (process running for 1163.907)
+2026-04-09 16:02:32 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-04-09 16:02:32 [main] INFO  c.j.backend.BackendApplicationTests - Starting BackendApplicationTests using Java 23.0.1 with PID 45356 (started by user in H:\Projects\1rstWap-Assignment\JewelHouse\backend)
+2026-04-09 16:02:32 [main] DEBUG c.j.backend.BackendApplicationTests - Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-04-09 16:02:32 [main] INFO  c.j.backend.BackendApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-04-09 16:02:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-09 16:02:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 41 ms. Found 3 JPA repository interfaces.
+2026-04-09 16:02:33 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-09 16:02:34 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@510da778
+2026-04-09 16:02:34 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-09 16:02:34 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-09 16:02:34 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-09 16:02:34 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-09 16:02:34 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-09 16:02:34 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/jwelryhousemst?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: jwelryhousemst/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-09 16:02:35 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-09 16:02:35 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 16:02:35 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-09 16:02:36 [main] INFO  c.j.backend.BackendApplicationTests - Started BackendApplicationTests in 3.883 seconds (process running for 4.893)
+2026-04-09 16:02:37 [main] INFO  c.j.backend.service.ItemService - Fetching active items with price - page: 0, pageSize: 10, name: null, metalType: null, availability: null, sortBy: name, sortDir: asc
+2026-04-09 16:02:37 [main] INFO  c.j.backend.service.ItemService - Fetching item with id: 10
+2026-04-09 16:02:37 [main] INFO  c.j.backend.service.ItemService - Creating new item with name: Ring
+2026-04-09 16:02:37 [main] INFO  c.j.backend.service.ItemService - Item created successfully with id: 1
+2026-04-09 16:02:37 [main] INFO  c.j.backend.service.ItemService - Updating item with id: 5
+2026-04-09 16:02:37 [main] INFO  c.j.backend.service.ItemService - Item updated successfully with id: 5
+2026-04-09 16:02:37 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-09 16:02:37 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-09 16:02:37 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

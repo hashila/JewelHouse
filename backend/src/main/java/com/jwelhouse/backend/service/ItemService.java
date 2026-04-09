@@ -41,7 +41,16 @@ public class ItemService {
 	private MockMetalPriceApiService mockMetalPriceApiService;
 
 	/**
-	 * Get active items with pagination, optional filtering and sorting
+	 * Returns active items using pagination, optional filtering, and optional sorting.
+	 *
+	 * @param page zero-based page index
+	 * @param pageSize number of records per page
+	 * @param name optional partial name match (LIKE)
+	 * @param metalType optional exact metal type filter
+	 * @param availability optional availability code filter
+	 * @param sortBy optional sort field (name or makingCharges)
+	 * @param sortDir optional sort direction (asc or desc)
+	 * @return paged active items mapped to {@link ItemResponseDTO}
 	 */
 	public Page<ItemResponseDTO> getActiveItems(int page, int pageSize,
 			String name, String metalType, Character availability,
@@ -55,7 +64,16 @@ public class ItemService {
 	}
 
 	/**
-	 * Get active items with calculated price included.
+	 * Returns active items with calculated final price included in each row.
+	 *
+	 * @param page zero-based page index
+	 * @param pageSize number of records per page
+	 * @param name optional partial name match (LIKE)
+	 * @param metalType optional exact metal type filter
+	 * @param availability optional availability code filter
+	 * @param sortBy optional sort field (name or makingCharges)
+	 * @param sortDir optional sort direction (asc or desc)
+	 * @return paged active items mapped to {@link ItemWithPriceResponseDTO}
 	 */
 	public Page<ItemWithPriceResponseDTO> getActiveItemsWithPrice(int page, int pageSize,
 			String name, String metalType, Character availability,
@@ -69,6 +87,20 @@ public class ItemService {
 		return items.map(item -> convertToItemWithPriceResponseDTO(item, metalCodeByName));
 	}
 
+	/**
+	 * Executes the active-item query with optional filters and requested sorting,
+	 * then returns a paged Item result.
+	 *
+	 * @param page zero-based page index
+	 * @param pageSize number of records per page
+	 * @param name optional partial name match
+	 * @param metalType optional exact metal type filter
+	 * @param availability optional availability filter
+	 * @param sortBy optional sort field name
+	 * @param sortDir optional sort direction
+	 * @return paged active {@link Item} entities
+	 */
+
 	private Page<Item> findActiveItemsPage(int page, int pageSize,
 			String name, String metalType, Character availability,
 			String sortBy, String sortDir) {
@@ -79,6 +111,14 @@ public class ItemService {
 		return itemRepository.findAll(spec, pageable);
 	}
 
+	/**
+	 * Converts incoming sort parameters into a safe Sort object.
+	 * Only supported fields are exposed to prevent invalid property access.
+	 *
+	 * @param sortBy incoming field name
+	 * @param sortDir incoming sort direction
+	 * @return resolved {@link Sort} object with safe defaults
+	 */
 	private Sort buildSort(String sortBy, String sortDir) {
 		String field = switch (sortBy == null ? "" : sortBy.toLowerCase()) {
 			case "makingcharges", "making_charges" -> "makingCharges";
@@ -91,7 +131,11 @@ public class ItemService {
 	}
 
 	/**
-	 * Get item by ID
+	 * Returns a single item by identifier.
+	 *
+	 * @param id item identifier
+	 * @return item mapped to {@link ItemResponseDTO}
+	 * @throws CustomException when item does not exist
 	 */
 	public ItemResponseDTO getItemById(Long id) {
 		log.info("Fetching item with id: {}", id);
@@ -100,7 +144,11 @@ public class ItemService {
 	}
 
 	/**
-	 * Create a new item
+	 * Creates a new item and its child tax rows.
+	 *
+	 * @param requestDTO item creation payload
+	 * @return created item payload wrapped in {@link ResponseEntity}
+	 * @throws CustomException when request validation fails
 	 */
 	public ResponseEntity<ItemResponseDTO> createItem(ItemRequestDTO requestDTO) {
 		log.info("Creating new item with name: {}", requestDTO.getName());
@@ -116,7 +164,12 @@ public class ItemService {
 	}
 
 	/**
-	 * Update an existing item
+	 * Updates an existing item and replaces its tax rows.
+	 *
+	 * @param id item identifier
+	 * @param requestDTO item update payload
+	 * @return updated item payload
+	 * @throws CustomException when item does not exist or validation fails
 	 */
 	public ItemResponseDTO updateItem(Long id, ItemRequestDTO requestDTO) {
 		log.info("Updating item with id: {}", id);
@@ -132,7 +185,10 @@ public class ItemService {
 	}
 
 	/**
-	 * Soft delete an item by ID
+	 * Soft deletes an item by changing status to deleted.
+	 *
+	 * @param id item identifier
+	 * @throws CustomException when item does not exist
 	 */
 	public void deleteItem(Long id) {
 		log.info("Soft deleting item with id: {}", id);
@@ -142,6 +198,13 @@ public class ItemService {
 		log.info("Item with id: {} marked as deleted", id);
 	}
 
+	/**
+	 * Loads an item by id or throws a business exception when not found.
+	 *
+	 * @param id item identifier
+	 * @return found {@link Item} entity
+	 * @throws CustomException when item is missing
+	 */
 	private Item findItemByIdOrThrow(Long id) {
 		Optional<Item> item = itemRepository.findById(id);
 		if (item.isEmpty()) {
@@ -151,6 +214,13 @@ public class ItemService {
 		return item.get();
 	}
 
+	/**
+	 * Validates top-level request constraints that are enforced in service logic.
+	 *
+	 * @param requestDTO incoming item payload
+	 * @param itemId target item id for update, null for create
+	 * @throws CustomException when any validation rule fails
+	 */
 	private void validateItemRequest(ItemRequestDTO requestDTO, Long itemId) {
 		if (!isValidAvailability(requestDTO.getAvailability())) {
 			log.warn("Invalid availability character: {}", requestDTO.getAvailability());
@@ -165,6 +235,13 @@ public class ItemService {
 		validateTaxes(requestDTO.getTaxes(), itemId);
 	}
 
+	/**
+	 * Validates tax-item relationship rules for create/update requests.
+	 *
+	 * @param taxes incoming tax list
+	 * @param itemId target item id for update, null for create
+	 * @throws CustomException when tax-item relationship is invalid
+	 */
 	private void validateTaxes(List<ItemTaxRequestDTO> taxes, Long itemId) {
 		if (taxes == null) {
 			return;
@@ -183,6 +260,12 @@ public class ItemService {
 		}
 	}
 
+	/**
+	 * Checks whether availability value is one of the supported status codes.
+	 *
+	 * @param availability availability character
+	 * @return true when value is valid; otherwise false
+	 */
 	private boolean isValidAvailability(Character availability) {
 		if (availability == null) {
 			return false;
@@ -192,6 +275,12 @@ public class ItemService {
 				|| availability == AppConstants.AVAILABILITY_LIMITED_STOCK;
 	}
 
+	/**
+	 * Checks whether item status value is one of the supported status codes.
+	 *
+	 * @param status status character
+	 * @return true when value is valid; otherwise false
+	 */
 	private boolean isValidStatus(Character status) {
 		if (status == null) {
 			return false;
@@ -204,6 +293,12 @@ public class ItemService {
 				|| status == AppConstants.STATUS_REJECTED;
 	}
 
+	/**
+	 * Copies mutable item fields from request payload to entity.
+	 *
+	 * @param item target entity
+	 * @param requestDTO source payload
+	 */
 	private void populateItemFields(Item item, ItemRequestDTO requestDTO) {
 		item.setName(requestDTO.getName());
 		item.setMetalType(requestDTO.getMetalType());
@@ -215,6 +310,13 @@ public class ItemService {
 		item.setImage(requestDTO.getImage());
 	}
 
+	/**
+	 * Rebuilds item tax rows from incoming request taxes.
+	 * Existing taxes are replaced to keep update semantics explicit.
+	 *
+	 * @param item parent item entity
+	 * @param taxRequests incoming tax payload list
+	 */
 	private void syncItemTaxes(Item item, List<ItemTaxRequestDTO> taxRequests) {
 		if (item.getTaxes() == null) {
 			item.setTaxes(new ArrayList<>());
@@ -235,7 +337,10 @@ public class ItemService {
 	}
 
 	/**
-	 * Convert Item entity to ItemResponseDTO
+	 * Converts an item entity to base item response DTO.
+	 *
+	 * @param item source entity
+	 * @return mapped {@link ItemResponseDTO}
 	 */
 	private ItemResponseDTO convertToResponseDTO(Item item) {
 		ItemResponseDTO dto = new ItemResponseDTO();
@@ -254,6 +359,14 @@ public class ItemService {
 		return dto;
 	}
 
+	/**
+	 * Converts an item entity into an item-with-price DTO by calculating:
+	 * metal cost (weight-aware) + making + shipping + aggregated taxes.
+	 *
+	 * @param item source item entity
+	 * @param metalCodeByName lookup map of metal name to metal code
+	 * @return mapped {@link ItemWithPriceResponseDTO} including final price
+	 */
 	private ItemWithPriceResponseDTO convertToItemWithPriceResponseDTO(Item item,
 			Map<String, String> metalCodeByName) {
 		String normalizedMetalName = item.getMetalType() == null ? "" : item.getMetalType().trim().toLowerCase();
@@ -289,6 +402,13 @@ public class ItemService {
 		return dto;
 	}
 
+	/**
+	 * Builds a lookup map of metal name (lowercase) to metal code for the
+	 * currently loaded item page to avoid repeated DB calls per item.
+	 *
+	 * @param items page content items
+	 * @return map keyed by normalized metal name with metal code as value
+	 */
 	private Map<String, String> buildMetalCodeByName(List<Item> items) {
 		if (items == null || items.isEmpty()) {
 			return Map.of();
@@ -313,6 +433,12 @@ public class ItemService {
 				));
 	}
 
+	/**
+	 * Maps a tax entity to its response DTO representation.
+	 *
+	 * @param tax source tax entity
+	 * @return mapped {@link ItemTaxResponseDTO}
+	 */
 	private ItemTaxResponseDTO convertTaxToResponseDTO(ItemTax tax) {
 		ItemTaxResponseDTO dto = new ItemTaxResponseDTO();
 		dto.setItemId(tax.getItem() != null ? tax.getItem().getId() : null);
