@@ -9,5 +9,6 @@ public class MetalResponseDTO {
 
 	private Long id;
 	private String name;
+	private String code;
 }
 

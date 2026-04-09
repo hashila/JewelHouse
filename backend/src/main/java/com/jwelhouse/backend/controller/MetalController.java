@@ -1,6 +1,5 @@
 package com.jwelhouse.backend.controller;
 
-import com.jwelhouse.backend.dto.MetalLivePriceResponseDTO;
 import com.jwelhouse.backend.dto.MetalResponseDTO;
 import com.jwelhouse.backend.service.MetalService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +24,5 @@ public class MetalController {
 	public List<MetalResponseDTO> getMetalList() {
 		log.info("GET /api/metals/getList");
 		return metalService.getMetalList();
-	}
-
-	@GetMapping("/getLivePrices")
-	public List<MetalLivePriceResponseDTO> getMetalLivePrices() {
-		log.info("GET /api/metals/getLivePrices");
-		return metalService.getMetalListWithLivePrices();
 	}
 }

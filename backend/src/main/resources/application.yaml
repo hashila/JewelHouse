@@ -21,10 +21,6 @@ spring:
     show-sql: false
 
 
-metal:
-  price:
-    base-url: https://api.metals.live/v1
-
 logging:
   level:
     root: INFO

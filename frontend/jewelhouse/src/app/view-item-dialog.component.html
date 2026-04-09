@@ -1,5 +1,5 @@
-<div class="jh-dialog-backdrop" (click)="close.emit()">
-  <div class="jh-dialog-panel" (click)="$event.stopPropagation()">
+<div class="jh-dialog-backdrop">
+  <div class="jh-dialog-panel">
     <h3 class="text-xl font-semibold text-amber-950">View Item</h3>
     <p class="mt-1 text-sm text-stone-600">{{ item.name }}</p>
 
@@ -13,6 +13,7 @@
       <div class="jh-view-row"><span>Metal Type</span><strong>{{ item.metalType }}</strong></div>
       <div class="jh-view-row"><span>Weight</span><strong>{{ item.weight }}</strong></div>
       <div class="jh-view-row"><span>Making Charges</span><strong>{{ item.makingCharges }}</strong></div>
+      <div class="jh-view-row"><span>Shipping Charges</span><strong>{{ item.shippingCharges }}</strong></div>
       <div class="jh-view-row sm:col-span-2 items-start gap-4">
         <span class="shrink-0 pt-0.5">Taxes</span>
         <div class="min-w-0 flex-1">

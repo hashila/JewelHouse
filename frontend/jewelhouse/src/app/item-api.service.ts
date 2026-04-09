@@ -7,6 +7,7 @@ import {
   ActiveItemsQuery,
   ItemRequestDto,
   ItemResponseDto,
+  ItemWithPriceResponseDto,
   ItemTaxResponseDto,
   PageResponse
 } from './item-api.models';
@@ -19,22 +20,20 @@ export class ItemApiService {
   constructor(private readonly http: HttpClient) {}
 
   getActiveItems(query: ActiveItemsQuery): Observable<PageResponse<ItemModel>> {
-    let params = new HttpParams().set('page', query.page).set('pageSize', query.pageSize);
-    params = params.set('sortBy', query.sortBy).set('sortDir', query.sortDir);
-    const name = query.name?.trim();
-    if (name) {
-      params = params.set('name', name);
-    }
-    const metal = query.metalType?.trim();
-    if (metal) {
-      params = params.set('metalType', metal);
-    }
-    if (query.availability && /^[SOL]$/.test(query.availability)) {
-      params = params.set('availability', query.availability);
-    }
+    const params = this.buildActiveItemsParams(query);
     return this.http
       .get<PageResponse<ItemResponseDto>>(`${this.baseUrl}/getActiveList`, { params })
       .pipe(map((response) => ({ ...response, content: response.content.map((item) => this.toUiModel(item)) })));
+  }
+
+  getActiveItemsWithPrice(query: ActiveItemsQuery): Observable<PageResponse<ItemModel>> {
+    const params = this.buildActiveItemsParams(query);
+    return this.http
+      .get<PageResponse<ItemWithPriceResponseDto>>(`${this.baseUrl}/getActiveListWithPrice`, { params })
+      .pipe(map((response) => ({
+        ...response,
+        content: response.content.map((item) => this.toUiModel(item))
+      })));
   }
 
   createItem(input: ItemInput): Observable<ItemModel> {
@@ -63,12 +62,15 @@ export class ItemApiService {
   }
 
   private toUiModel(dto: ItemResponseDto): ItemModel {
+    const withPrice = dto as ItemWithPriceResponseDto;
     return {
       id: dto.id,
       name: dto.name,
       metalType: dto.metalType,
       weight: String(dto.weight),
       makingCharges: String(dto.makingCharges),
+      shippingCharges: String(dto.shippingCharges ?? 0),
+      price: withPrice.price != null ? String(withPrice.price) : undefined,
       taxes: this.taxesFromDto(dto.taxes),
       availability: this.availabilityCharToLabel(dto.availability),
       image: dto.image
@@ -98,6 +100,7 @@ export class ItemApiService {
       metalType: input.metalType,
       weight: this.toNumber(input.weight),
       makingCharges: this.toNumber(input.makingCharges),
+      shippingCharges: this.toNumber(input.shippingCharges),
       availability: this.availabilityLabelToChar(input.availability),
       status: 'A',
       image: this.normalizeImagePayload(input.image),
@@ -138,5 +141,22 @@ export class ItemApiService {
     }
     const binary = Array.from(new Uint8Array(image), (byte) => String.fromCharCode(byte)).join('');
     return btoa(binary);
+  }
+
+  private buildActiveItemsParams(query: ActiveItemsQuery): HttpParams {
+    let params = new HttpParams().set('page', query.page).set('pageSize', query.pageSize);
+    params = params.set('sortBy', query.sortBy).set('sortDir', query.sortDir);
+    const name = query.name?.trim();
+    if (name) {
+      params = params.set('name', name);
+    }
+    const metal = query.metalType?.trim();
+    if (metal) {
+      params = params.set('metalType', metal);
+    }
+    if (query.availability && /^[SOL]$/.test(query.availability)) {
+      params = params.set('availability', query.availability);
+    }
+    return params;
   }
 }

@@ -7,10 +7,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class MetalLivePriceResponseDTO {
+public class ItemWithPriceResponseDTO extends ItemResponseDTO {
 
-	private String metalName;
-	private String metalCode;
 	private BigDecimal price;
 }
 

@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private loadItems(page: number): void {
     this.isLoading = true;
-    this.itemApi.getActiveItems(this.buildQuery(page)).subscribe({
+    this.itemApi.getActiveItemsWithPrice(this.buildQuery(page)).subscribe({
       next: (response) => {
         this.jewelleryItems = response.content.map((item) => this.toJewelleryItem(item));
         this.currentPage = response.number;
@@ -157,7 +157,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       category: 'Jewellery',
       weight: `${item.weight}g`,
       availability: item.availability,
-      price: Number(item.makingCharges) || 0,
+      price: Number(item.price ?? item.makingCharges) || 0,
       image: this.toImageUrl(item.image) || this.fallbackImage
     };
   }

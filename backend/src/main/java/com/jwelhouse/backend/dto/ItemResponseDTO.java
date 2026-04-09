@@ -19,6 +19,7 @@ public class ItemResponseDTO {
 	private String metalType;
 	private BigDecimal weight;
 	private BigDecimal makingCharges;
+	private BigDecimal shippingCharges;
 	private Character availability;
 	private Character status;
 	private byte[] image;

@@ -10,5 +10,7 @@ import java.util.List;
 public interface MetalRepository extends JpaRepository<Metal, Long> {
 
 	List<Metal> findAllByOrderByNameAsc();
+
+	List<Metal> findByNameIn(List<String> names);
 }
 

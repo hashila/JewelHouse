@@ -54,6 +54,7 @@ export interface ItemRequestDto {
   metalType: string;
   weight: number;
   makingCharges: number;
+  shippingCharges: number;
   availability: string;
   status: string;
   image: string | null;
@@ -66,10 +67,15 @@ export interface ItemResponseDto {
   metalType: string;
   weight: number;
   makingCharges: number;
+  shippingCharges: number;
   availability: string;
   status: string;
   image: string | number[] | null;
   taxes?: ItemTaxResponseDto[] | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ItemWithPriceResponseDto extends ItemResponseDto {
+  price: number;
 }

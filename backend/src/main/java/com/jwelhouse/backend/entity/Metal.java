@@ -16,5 +16,8 @@ public class Metal {
 
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
+
+	@Column(name = "code", length = 10, nullable = false)
+	private String code;
 }
 

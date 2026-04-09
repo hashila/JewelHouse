@@ -5,10 +5,13 @@ import com.jwelhouse.backend.dto.ItemRequestDTO;
 import com.jwelhouse.backend.dto.ItemResponseDTO;
 import com.jwelhouse.backend.dto.ItemTaxRequestDTO;
 import com.jwelhouse.backend.dto.ItemTaxResponseDTO;
+import com.jwelhouse.backend.dto.ItemWithPriceResponseDTO;
 import com.jwelhouse.backend.entity.Item;
 import com.jwelhouse.backend.entity.ItemTax;
+import com.jwelhouse.backend.entity.Metal;
 import com.jwelhouse.backend.exception.CustomException;
 import com.jwelhouse.backend.repository.ItemRepository;
+import com.jwelhouse.backend.repository.MetalRepository;
 import com.jwelhouse.backend.repository.specification.ItemSpecification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +24,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @Transactional
 public class ItemService {
 
+	private static final BigDecimal HUNDRED = new BigDecimal("100");
+
 	private ItemRepository itemRepository;
+	private MetalRepository metalRepository;
+	private MockMetalPriceApiService mockMetalPriceApiService;
 
 	/**
 	 * Get active items with pagination, optional filtering and sorting
@@ -41,15 +49,34 @@ public class ItemService {
 		log.info("Fetching active items - page: {}, pageSize: {}, name: {}, metalType: {}, availability: {}, sortBy: {}, sortDir: {}",
 				page, pageSize, name, metalType, availability, sortBy, sortDir);
 
-		Sort sort = buildSort(sortBy, sortDir);
-		Pageable pageable = PageRequest.of(page, pageSize, sort);
-
-		Specification<Item> spec = ItemSpecification.buildActiveItemSpec(
-				AppConstants.STATUS_ACTIVE, name, metalType, availability);
-
-		Page<Item> items = itemRepository.findAll(spec, pageable);
+		Page<Item> items = findActiveItemsPage(page, pageSize, name, metalType, availability, sortBy, sortDir);
 		log.debug("Found {} active items", items.getTotalElements());
 		return items.map(this::convertToResponseDTO);
+	}
+
+	/**
+	 * Get active items with calculated price included.
+	 */
+	public Page<ItemWithPriceResponseDTO> getActiveItemsWithPrice(int page, int pageSize,
+			String name, String metalType, Character availability,
+			String sortBy, String sortDir) {
+		log.info("Fetching active items with price - page: {}, pageSize: {}, name: {}, metalType: {}, availability: {}, sortBy: {}, sortDir: {}",
+				page, pageSize, name, metalType, availability, sortBy, sortDir);
+
+		Page<Item> items = findActiveItemsPage(page, pageSize, name, metalType, availability, sortBy, sortDir);
+		Map<String, String> metalCodeByName = buildMetalCodeByName(items.getContent());
+
+		return items.map(item -> convertToItemWithPriceResponseDTO(item, metalCodeByName));
+	}
+
+	private Page<Item> findActiveItemsPage(int page, int pageSize,
+			String name, String metalType, Character availability,
+			String sortBy, String sortDir) {
+		Sort sort = buildSort(sortBy, sortDir);
+		Pageable pageable = PageRequest.of(page, pageSize, sort);
+		Specification<Item> spec = ItemSpecification.buildActiveItemSpec(
+				AppConstants.STATUS_ACTIVE, name, metalType, availability);
+		return itemRepository.findAll(spec, pageable);
 	}
 
 	private Sort buildSort(String sortBy, String sortDir) {
@@ -182,6 +209,7 @@ public class ItemService {
 		item.setMetalType(requestDTO.getMetalType());
 		item.setWeight(requestDTO.getWeight());
 		item.setMakingCharges(requestDTO.getMakingCharges());
+		item.setShippingCharges(requestDTO.getShippingCharges());
 		item.setAvailability(requestDTO.getAvailability());
 		item.setStatus(requestDTO.getStatus());
 		item.setImage(requestDTO.getImage());
@@ -216,6 +244,7 @@ public class ItemService {
 		dto.setMetalType(item.getMetalType());
 		dto.setWeight(item.getWeight());
 		dto.setMakingCharges(item.getMakingCharges());
+		dto.setShippingCharges(item.getShippingCharges());
 		dto.setAvailability(item.getAvailability());
 		dto.setStatus(item.getStatus());
 		dto.setImage(item.getImage());
@@ -223,6 +252,65 @@ public class ItemService {
 		dto.setCreatedAt(item.getCreatedAt());
 		dto.setUpdatedAt(item.getUpdatedAt());
 		return dto;
+	}
+
+	private ItemWithPriceResponseDTO convertToItemWithPriceResponseDTO(Item item,
+			Map<String, String> metalCodeByName) {
+		String normalizedMetalName = item.getMetalType() == null ? "" : item.getMetalType().trim().toLowerCase();
+		String metalCode = metalCodeByName.get(normalizedMetalName);
+
+		BigDecimal metalCost = mockMetalPriceApiService.calculateMetalCostForWeight(metalCode, item.getWeight());
+
+		BigDecimal makingCharges = item.getMakingCharges() == null ? BigDecimal.ZERO : item.getMakingCharges();
+		BigDecimal shippingCharges = item.getShippingCharges() == null ? BigDecimal.ZERO : item.getShippingCharges();
+		BigDecimal baseAmount = metalCost.add(makingCharges).add(shippingCharges);
+
+		BigDecimal totalTaxPercentage = item.getTaxes().stream()
+				.map(ItemTax::getTaxPercentage)
+				.filter(Objects::nonNull)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal totalTaxAmount = baseAmount.multiply(totalTaxPercentage).divide(HUNDRED, 2, RoundingMode.HALF_UP);
+		BigDecimal finalPrice = baseAmount.add(totalTaxAmount).setScale(2, RoundingMode.HALF_UP);
+
+		ItemWithPriceResponseDTO dto = new ItemWithPriceResponseDTO();
+		dto.setId(item.getId());
+		dto.setName(item.getName());
+		dto.setMetalType(item.getMetalType());
+		dto.setWeight(item.getWeight());
+		dto.setMakingCharges(item.getMakingCharges());
+		dto.setShippingCharges(item.getShippingCharges());
+		dto.setAvailability(item.getAvailability());
+		dto.setStatus(item.getStatus());
+		dto.setImage(item.getImage());
+		dto.setTaxes(item.getTaxes().stream().map(this::convertTaxToResponseDTO).toList());
+		dto.setCreatedAt(item.getCreatedAt());
+		dto.setUpdatedAt(item.getUpdatedAt());
+		dto.setPrice(finalPrice);
+		return dto;
+	}
+
+	private Map<String, String> buildMetalCodeByName(List<Item> items) {
+		if (items == null || items.isEmpty()) {
+			return Map.of();
+		}
+
+		Set<String> metalNames = items.stream()
+				.map(Item::getMetalType)
+				.filter(name -> name != null && !name.isBlank())
+				.collect(Collectors.toSet());
+
+		if (metalNames.isEmpty()) {
+			return Map.of();
+		}
+
+		List<Metal> metals = metalRepository.findByNameIn(new ArrayList<>(metalNames));
+		return metals.stream()
+				.filter(metal -> metal.getName() != null && metal.getCode() != null)
+				.collect(Collectors.toMap(
+						metal -> metal.getName().trim().toLowerCase(),
+						metal -> metal.getCode().trim(),
+						(existing, replacement) -> existing
+				));
 	}
 
 	private ItemTaxResponseDTO convertTaxToResponseDTO(ItemTax tax) {
@@ -237,5 +325,14 @@ public class ItemService {
 	public void setItemRepository(ItemRepository itemRepository) {
 		this.itemRepository = itemRepository;
 	}
-}
 
+	@Autowired
+	public void setMetalRepository(MetalRepository metalRepository) {
+		this.metalRepository = metalRepository;
+	}
+
+	@Autowired
+	public void setMockMetalPriceApiService(MockMetalPriceApiService mockMetalPriceApiService) {
+		this.mockMetalPriceApiService = mockMetalPriceApiService;
+	}
+}

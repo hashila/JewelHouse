@@ -1,0 +1,28 @@
+{
+  "source": "mock-metal-price-api",
+  "currency": "USD",
+  "priceUnit": "KG",
+  "prices": [
+    {
+      "code": "XAU",
+      "name": "Gold",
+      "price": 2350.75
+    },
+    {
+      "code": "XAG",
+      "name": "Silvar",
+      "price": 28.35
+    },
+    {
+      "code": "XPL",
+      "name": "Platinum",
+      "price": 980.4
+    },
+    {
+      "code": "NI",
+      "name": "Nickel",
+      "price": 18.1
+    }
+  ]
+}
+

@@ -31,6 +31,10 @@ public class ItemRequestDTO {
 	@DecimalMin(value = "0.0", message = "Making charges must not be less than zero")
 	private BigDecimal makingCharges;
 
+	@NotNull(message = "Shipping charges is required")
+	@DecimalMin(value = "0.0", message = "Shipping charges must not be less than zero")
+	private BigDecimal shippingCharges;
+
 	@NotNull(message = "Availability is required")
 	private Character availability;
 

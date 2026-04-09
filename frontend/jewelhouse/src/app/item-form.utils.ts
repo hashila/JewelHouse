@@ -27,6 +27,7 @@ export const EMPTY_ITEM_INPUT: ItemInput = {
   metalType: '',
   weight: '',
   makingCharges: '',
+  shippingCharges: '',
   taxes: [],
   availability: 'In Stock',
   image: null
@@ -65,6 +66,7 @@ export function sanitizeItemInput(input: ItemInput): ItemInput {
     metalType: String(input.metalType).trim(),
     weight: String(input.weight).trim(),
     makingCharges: String(input.makingCharges).trim(),
+    shippingCharges: String(input.shippingCharges).trim(),
     taxes: sanitizeItemTaxes(input.taxes),
     availability: input.availability,
     image: input.image

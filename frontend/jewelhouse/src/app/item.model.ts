@@ -9,6 +9,8 @@ export interface ItemModel {
   metalType: string;
   weight: string;
   makingCharges: string;
+  shippingCharges: string;
+  price?: string;
   taxes: ItemTaxLine[];
   availability: string;
   image: string | number[] | null;

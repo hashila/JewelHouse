@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table jwelryhousemst.item: ~0 rows (approximately)
+-- Dumping data for table jwelryhousemst.item: ~1 rows (approximately)
 
 -- Dumping structure for table jwelryhousemst.item_tax
 CREATE TABLE IF NOT EXISTS `item_tax` (
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `item_tax` (
   CONSTRAINT `fk_item_tax_item` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table jwelryhousemst.item_tax: ~0 rows (approximately)
+-- Dumping data for table jwelryhousemst.item_tax: ~2 rows (approximately)
 
 -- Dumping structure for table jwelryhousemst.metal
 CREATE TABLE IF NOT EXISTS `metal` (
@@ -57,11 +57,11 @@ CREATE TABLE IF NOT EXISTS `metal` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table jwelryhousemst.metal: ~4 rows (approximately)
-INSERT INTO `metal` (`id`, `name`) VALUES
-	(1, 'Gold'),
-	(2, 'Silver'),
-	(3, 'Platinum'),
-	(4, 'Nickel');
+INSERT INTO `metal` (`id`, `name`, `code`) VALUES
+	(1, 'Gold', 'XAU'),
+	(2, 'Silver', 'XAG'),
+	(3, 'Platinum', 'XPL'),
+	(4, 'Nickel', 'NI');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

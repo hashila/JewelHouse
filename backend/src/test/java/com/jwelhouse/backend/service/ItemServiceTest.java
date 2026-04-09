@@ -3,14 +3,19 @@ package com.jwelhouse.backend.service;
 import com.jwelhouse.backend.dto.ItemRequestDTO;
 import com.jwelhouse.backend.dto.ItemResponseDTO;
 import com.jwelhouse.backend.dto.ItemTaxRequestDTO;
+import com.jwelhouse.backend.dto.ItemWithPriceResponseDTO;
 import com.jwelhouse.backend.entity.Item;
 import com.jwelhouse.backend.entity.ItemTax;
+import com.jwelhouse.backend.entity.Metal;
 import com.jwelhouse.backend.repository.ItemRepository;
+import com.jwelhouse.backend.repository.MetalRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
@@ -20,6 +25,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,12 +35,54 @@ class ItemServiceTest {
 	@Mock
 	private ItemRepository itemRepository;
 
+	@Mock
+	private MetalRepository metalRepository;
+
+	@Mock
+	private MockMetalPriceApiService mockMetalPriceApiService;
+
 	private ItemService itemService;
 
 	@BeforeEach
 	void setUp() {
 		itemService = new ItemService();
 		itemService.setItemRepository(itemRepository);
+		itemService.setMetalRepository(metalRepository);
+		itemService.setMockMetalPriceApiService(mockMetalPriceApiService);
+	}
+
+	@Test
+	void getActiveItemsWithPriceShouldUseWeightBasedMetalCost() {
+		Item item = new Item();
+		item.setId(11L);
+		item.setName("Chain");
+		item.setMetalType("Gold");
+		item.setWeight(new BigDecimal("10.00"));
+		item.setMakingCharges(new BigDecimal("100.00"));
+		item.setShippingCharges(new BigDecimal("20.00"));
+
+		ItemTax tax = new ItemTax();
+		tax.setTaxName("VAT");
+		tax.setTaxPercentage(new BigDecimal("10.00"));
+		tax.setItem(item);
+		item.getTaxes().add(tax);
+
+		Metal metal = new Metal();
+		metal.setName("Gold");
+		metal.setCode("XAU");
+
+		Page<Item> page = new PageImpl<>(List.of(item));
+		when(itemRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class), any(org.springframework.data.domain.Pageable.class)))
+				.thenReturn(page);
+		when(metalRepository.findByNameIn(anyList())).thenReturn(List.of(metal));
+		when(mockMetalPriceApiService.calculateMetalCostForWeight(eq("XAU"), eq(new BigDecimal("10.00"))))
+				.thenReturn(new BigDecimal("50.00"));
+
+		Page<ItemWithPriceResponseDTO> response = itemService.getActiveItemsWithPrice(
+				0, 10, null, null, null, "name", "asc");
+
+		assertEquals(1, response.getTotalElements());
+		assertEquals(new BigDecimal("187.00"), response.getContent().get(0).getPrice());
 	}
 
 	@Test
@@ -113,6 +162,7 @@ class ItemServiceTest {
 		request.setMetalType("Gold");
 		request.setWeight(new BigDecimal("10.50"));
 		request.setMakingCharges(new BigDecimal("250.00"));
+		request.setShippingCharges(new BigDecimal("50.00"));
 		request.setAvailability('S');
 		request.setStatus('A');
 		request.setTaxes(taxes);

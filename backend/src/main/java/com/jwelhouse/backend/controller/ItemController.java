@@ -2,6 +2,7 @@ package com.jwelhouse.backend.controller;
 
 import com.jwelhouse.backend.dto.ItemRequestDTO;
 import com.jwelhouse.backend.dto.ItemResponseDTO;
+import com.jwelhouse.backend.dto.ItemWithPriceResponseDTO;
 import com.jwelhouse.backend.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,20 @@ public class ItemController {
 		log.info("GET /api/items/getActiveList - page: {}, pageSize: {}, name: {}, metalType: {}, availability: {}, sortBy: {}, sortDir: {}",
 				page, pageSize, name, metalType, availability, sortBy, sortDir);
 		return itemService.getActiveItems(page, pageSize, name, metalType, availability, sortBy, sortDir);
+	}
+
+	@GetMapping("/getActiveListWithPrice")
+	public Page<ItemWithPriceResponseDTO> getActiveItemsWithPrice(
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+			@RequestParam(name = "name", required = false) String name,
+			@RequestParam(name = "metalType", required = false) String metalType,
+			@RequestParam(name = "availability", required = false) Character availability,
+			@RequestParam(name = "sortBy", required = false) String sortBy,
+			@RequestParam(name = "sortDir", required = false) String sortDir) {
+		log.info("GET /api/items/getActiveListWithPrice - page: {}, pageSize: {}, name: {}, metalType: {}, availability: {}, sortBy: {}, sortDir: {}",
+				page, pageSize, name, metalType, availability, sortBy, sortDir);
+		return itemService.getActiveItemsWithPrice(page, pageSize, name, metalType, availability, sortBy, sortDir);
 	}
 
 	@PostMapping("/create")

@@ -31,6 +31,9 @@ public class Item {
 	@Column(name = "making_charges", nullable = false)
 	private BigDecimal makingCharges;
 
+	@Column(name = "shipping_charges", nullable = false)
+	private BigDecimal shippingCharges;
+
 	@Column(name = "availability", nullable = false)
 	private Character availability;
 

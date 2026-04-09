@@ -1,5 +1,5 @@
-<div class="jh-dialog-backdrop" (click)="close.emit()">
-  <div class="jh-dialog-panel" (click)="$event.stopPropagation()">
+<div class="jh-dialog-backdrop">
+  <div class="jh-dialog-panel">
     <h3 class="text-xl font-semibold text-amber-950">Update Item</h3>
     <p class="mt-1 text-sm text-stone-600">Edit details and save changes.</p>
 
@@ -15,6 +15,7 @@
       </div>
       <input [(ngModel)]="model.weight" type="number" class="jh-dialog-input" placeholder="Weight" />
       <input [(ngModel)]="model.makingCharges" type="number" class="jh-dialog-input" placeholder="Making Charges" />
+      <input [(ngModel)]="model.shippingCharges" type="number" min="0" step="0.01" class="jh-dialog-input" placeholder="Shipping Charges" />
       <div class="jh-select-wrap">
         <select [(ngModel)]="model.availability" class="jh-select jh-dialog-input w-full">
           @for (option of availabilityOptions; track option) {
