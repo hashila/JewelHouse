@@ -112,7 +112,8 @@ src/main/resources/application.yml
 
 - Jewellery Item Management (CRUD operations)  
 - Filtering (metal type, price range, category)  
-- Sorting (price, name)  
+- Sorting (price, name)
+- Dynamic Price Calculation (metal price, making charges, taxes, shipping)  
 - Responsive UI design  
 - Input validation and error handling  
 
